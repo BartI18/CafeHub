@@ -121,7 +121,7 @@ public class DatabaseManipulation {
         JdbcTemplate template = getJDBCConnection();
         String sql = "SELECT id, count_send, name_user, radius, prefer_lang FROM public.users where id = ?";
         try {
-            return template.query(sql, resultSet -> {
+            return template.query(sql, new Integer[]{id}, resultSet -> {
                 UserSettings us = new UserSettings();
                 us.setId(id);
                 us.setCountSend(resultSet.getInt("count_send"));

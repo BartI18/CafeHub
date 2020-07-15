@@ -18,7 +18,6 @@ public class MainHandler extends TelegramLongPollingBot {
     static final String BASE_URL = System.getenv("base_url");
 
     public void onUpdateReceived(Update update) {
-        System.out.println(String.format("Message: %s", update.getMessage()));
         List<Handler> handlers = defineHandler(update);
         if (!handlers.isEmpty()) {
             for (Handler h : handlers) {

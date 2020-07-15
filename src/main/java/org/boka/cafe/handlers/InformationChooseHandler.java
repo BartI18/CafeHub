@@ -30,6 +30,7 @@ public class InformationChooseHandler implements Handler {
 
         menuRow.add(Texts.getText(new KeyForText("AboutMe", lang)));
         menuRow.add(Texts.getText(new KeyForText("Feedback", lang)));
+        menuRow.add(Texts.getText(new KeyForText("YourSettings", lang)));
         menuRow1.add(Texts.getText(new KeyForText("BackButton", lang)));
         keyboardMarkup.setKeyboard(Arrays.asList(menuRow, menuRow1));
         sendMessage.setReplyMarkup(keyboardMarkup);

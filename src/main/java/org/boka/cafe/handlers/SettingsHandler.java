@@ -31,7 +31,6 @@ public class SettingsHandler implements Handler {
 
         menuRow.add(Texts.getText(new KeyForText("RadiusSearch", lang)));
         menuRow.add(Texts.getText(new KeyForText("LangTalk", lang)));
-        menuRow.add(Texts.getText(new KeyForText("YourSettings", lang)));
         menuRow1.add(Texts.getText(new KeyForText("BackButton", lang)));
         keyboardMarkup.setKeyboard(Arrays.asList(menuRow, menuRow1));
 
