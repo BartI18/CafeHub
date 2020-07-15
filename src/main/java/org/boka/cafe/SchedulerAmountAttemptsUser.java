@@ -19,7 +19,6 @@ public class SchedulerAmountAttemptsUser {
                     LocalDateTime localDateTime = dateTimeNow.truncatedTo(ChronoUnit.DAYS).plus(1, ChronoUnit.DAYS);
                     System.out.println("Go to sleep");
                     long delta = (localDateTime.toEpochSecond(ZoneOffset.UTC) - dateTimeNow.toEpochSecond(ZoneOffset.UTC)) * 1000;
-                    System.out.println(delta);
                     Thread.sleep(delta); //иду спать до 12 часов ночи
                 } catch (InterruptedException e) {
                     System.out.println(e.getMessage());

@@ -2,6 +2,7 @@ package org.boka.cafe.db;
 
 import org.boka.cafe.Misc.Misc;
 import org.boka.cafe.pojo.User;
+import org.boka.cafe.pojo.UserSettings;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.dao.DuplicateKeyException;
@@ -17,7 +18,8 @@ import java.util.concurrent.Executors;
 
 public class DatabaseManipulation {
 
-    private static String url = System.getenv("db_url");;
+    private static String url = System.getenv("db_url");
+    ;
 
     public static void registerPostgresDriver() {
         try {
@@ -113,6 +115,25 @@ public class DatabaseManipulation {
         } catch (RuntimeException ex) {
             System.out.println(String.format("Exception while update radius client: %d\tMessage: %s", user.getId(), ex.getCause().getMessage()));
         }
+    }
+
+    public static UserSettings getUserSettingById(int id) {
+        JdbcTemplate template = getJDBCConnection();
+        String sql = "SELECT id, count_send, name_user, radius, prefer_lang FROM public.users where id = ?";
+        try {
+            return template.query(sql, resultSet -> {
+                UserSettings us = new UserSettings();
+                us.setId(id);
+                us.setCountSend(resultSet.getInt("count_send"));
+                us.setNameUser(resultSet.getString("name_user"));
+                us.setRadius(String.valueOf(resultSet.getInt("radius")));
+                us.setPreferLang(resultSet.getString("prefer_lang"));
+                return us;
+            });
+        } catch (RuntimeException ex) {
+            System.out.println(String.format("Exception while get settings client: %d\tMessage: %s", id, ex.getCause().getMessage()));
+        }
+        return new UserSettings();
     }
 
 }

@@ -35,6 +35,7 @@ public class Misc {
         MAP_HANDLERS_BY_TEXT_WITHOUT_LANG.put("BackButton", Arrays.asList(ShowMenuHandler.class));
         MAP_HANDLERS_BY_TEXT_WITHOUT_LANG.put("AboutMe", Arrays.asList(AboutMeHandler.class, ShowMenuHandler.class));
         MAP_HANDLERS_BY_TEXT_WITHOUT_LANG.put("Feedback", Arrays.asList(FeedBackHandler.class));
+        MAP_HANDLERS_BY_TEXT_WITHOUT_LANG.put("YourSettings", Arrays.asList(YourSettingsHandler.class, ShowMenuHandler.class));
     }
 
     public static String defineLanguage(Integer userId, String language) {
