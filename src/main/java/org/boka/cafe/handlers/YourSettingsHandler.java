@@ -18,14 +18,13 @@ public class YourSettingsHandler implements Handler {
         Message message = update.getMessage();
         SendMessage sendMessage = Misc.getSendMessageWithChatId(message.getChatId());
         String lang = Misc.defineLanguage(message.getFrom().getId(), message.getFrom().getLanguageCode());
-        String baseText = Texts.getText(new KeyForText("", lang));
+        String baseText = Texts.getText(new KeyForText("InfoData", lang));
         sendMessage.setText(formFullText(message.getFrom().getId(), baseText));
         bot.execute(sendMessage);
     }
 
     private String formFullText(Integer id, String baseText) {
         UserSettings userSettingById = DatabaseManipulation.getUserSettingById(id);
-        System.out.println(userSettingById);
-        return "";
+        return String.format(baseText, userSettingById.getRadius(), userSettingById.getPreferLang());
     }
 }

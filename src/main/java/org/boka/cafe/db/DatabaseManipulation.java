@@ -123,11 +123,13 @@ public class DatabaseManipulation {
         try {
             return template.query(sql, new Integer[]{id}, resultSet -> {
                 UserSettings us = new UserSettings();
-                us.setId(id);
-                us.setCountSend(resultSet.getInt("count_send"));
-                us.setNameUser(resultSet.getString("name_user"));
-                us.setRadius(String.valueOf(resultSet.getInt("radius")));
-                us.setPreferLang(resultSet.getString("prefer_lang"));
+                while (resultSet.next()) {
+                    us.setId(id);
+                    us.setCountSend(resultSet.getInt("count_send"));
+                    us.setNameUser(resultSet.getString("name_user"));
+                    us.setRadius(String.valueOf(resultSet.getInt("radius")));
+                    us.setPreferLang(resultSet.getString("prefer_lang"));
+                }
                 return us;
             });
         } catch (RuntimeException ex) {
