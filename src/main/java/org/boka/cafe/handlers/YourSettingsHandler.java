@@ -20,6 +20,7 @@ public class YourSettingsHandler implements Handler {
         String lang = Misc.defineLanguage(message.getFrom().getId(), message.getFrom().getLanguageCode());
         String baseText = Texts.getText(new KeyForText("InfoData", lang)).replaceAll("newL", "<pre>\n</pre>");
         sendMessage.setText(formFullText(message.getFrom().getId(), baseText));
+        sendMessage.enableHtml(true);
         bot.execute(sendMessage);
     }
 
