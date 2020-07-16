@@ -61,9 +61,9 @@ public class DatabaseManipulation {
 
     public static void addNewClient(User user) {
         JdbcTemplate template = getJDBCConnection();
-        String sql = "INSERT INTO PUBLIC.users (id, count_send, name_user, number_phone, radius) values (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO PUBLIC.users (id, count_send, name_user, number_phone, radius, prefer_lang) values (?, ?, ?, ?, ?, ?)";
         try {
-            template.update(sql, user.getId(), user.getCountSend(), user.getName(), user.getPhone(), user.getRadius());
+            template.update(sql, user.getId(), user.getCountSend(), user.getName(), user.getPhone(), user.getRadius(), user.getLang());
         } catch (DuplicateKeyException ex) {
             System.out.println(String.format("Duplicate while add client: %d\tMessage: %s", user.getId(), ex.getCause().getMessage()));
         }

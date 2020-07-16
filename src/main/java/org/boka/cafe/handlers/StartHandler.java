@@ -36,6 +36,7 @@ public class StartHandler implements Handler {
             userSend.setName(name);
             userSend.setPhone(null); // пока номер не пишу
             userSend.setRadius(250);//изначально радиус 250 метров
+            userSend.setLang(language);
             DatabaseManipulation.addNewClient(userSend);
         }
 

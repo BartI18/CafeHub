@@ -18,7 +18,7 @@ public class YourSettingsHandler implements Handler {
         Message message = update.getMessage();
         SendMessage sendMessage = Misc.getSendMessageWithChatId(message.getChatId());
         String lang = Misc.defineLanguage(message.getFrom().getId(), message.getFrom().getLanguageCode());
-        String baseText = Texts.getText(new KeyForText("InfoData", lang));
+        String baseText = Texts.getText(new KeyForText("InfoData", lang)).replaceAll("newL", "<pre>\n</pre>");
         sendMessage.setText(formFullText(message.getFrom().getId(), baseText));
         bot.execute(sendMessage);
     }
