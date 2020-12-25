@@ -30,7 +30,7 @@ public class CurrencyPbHandler implements Handler {
 
         String url = new StringBuilder(MainHandler.PB_URL).append(MainHandler.PB_URL_CURR_ADD).toString();
         HttpEntity<String> responseEntity = new RestTemplate().exchange(url, HttpMethod.GET, entity, String.class);
-        JSONObject response = new JSONObject(responseEntity.getBody());
+//        JSONObject response = new JSONObject(responseEntity.getBody());
 
         sendMessage.setText(responseEntity.getBody());
         bot.execute(sendMessage);

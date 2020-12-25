@@ -28,7 +28,7 @@ public class CurrencyMonoHandler implements Handler {
 
         String url = new StringBuilder(MainHandler.MONO_URL).append(MainHandler.MONO_URL_CURR_ADD).toString();
         HttpEntity<String> responseEntity = new RestTemplate().exchange(url, HttpMethod.GET, entity, String.class);
-        JSONObject response = new JSONObject(responseEntity.getBody());
+//        JSONObject response = new JSONObject(responseEntity.getBody());
 
         sendMessage.setText(responseEntity.getBody());
         bot.execute(sendMessage);
