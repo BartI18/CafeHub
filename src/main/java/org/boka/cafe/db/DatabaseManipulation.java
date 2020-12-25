@@ -19,7 +19,6 @@ import java.util.concurrent.Executors;
 public class DatabaseManipulation {
 
     private static String url = System.getenv("db_url");
-    ;
 
     public static void registerPostgresDriver() {
         try {

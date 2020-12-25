@@ -33,7 +33,9 @@ public class ShowMenuHandler implements Handler {
         menuRow.add(buttonGeoData);
         menuRow.add(Texts.getText(new KeyForText("Settings", lang)));
         menuRow1.add(Texts.getText(new KeyForText("Info", lang)));
+        menuRow1.add(Texts.getText(new KeyForText("Others", lang)));
         keyboardMarkup.setKeyboard(Arrays.asList(menuRow, menuRow1));
+
         SendMessage sendMessage = Misc.getSendMessageWithChatId(message.getChatId());
         sendMessage.setReplyMarkup(keyboardMarkup);
         sendMessage.setText(Texts.getText(new KeyForText("ChooseBelow", lang)));
