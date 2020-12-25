@@ -37,6 +37,8 @@ public class Misc {
         MAP_HANDLERS_BY_TEXT_WITHOUT_LANG.put("Feedback", Arrays.asList(FeedBackHandler.class));
         MAP_HANDLERS_BY_TEXT_WITHOUT_LANG.put("YourSettings", Arrays.asList(YourSettingsHandler.class, ShowMenuHandler.class));
         MAP_HANDLERS_BY_TEXT_WITHOUT_LANG.put("Others", Arrays.asList(OthersMenuHandler.class));
+        MAP_HANDLERS_BY_TEXT_WITHOUT_LANG.put("CurrencyP24", Arrays.asList(CurrencyPbHandler.class));
+        MAP_HANDLERS_BY_TEXT_WITHOUT_LANG.put("CurrencyMono", Arrays.asList(CurrencyMonoHandler.class));
     }
 
     public static String defineLanguage(Integer userId, String language) {

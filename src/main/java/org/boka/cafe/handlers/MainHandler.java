@@ -16,6 +16,10 @@ public class MainHandler extends TelegramLongPollingBot {
     private static final List<String> LIST_DISTANCE = Arrays.asList("250 Ⓜ", "500 Ⓜ", "1000 Ⓜ", "1500 Ⓜ");
     private static final List<String> LIST_LANG = Arrays.asList("Українська \uD83C\uDDFA\uD83C\uDDE6", "Русский \uD83C\uDDF7\uD83C\uDDFA", "English \uD83C\uDDEC\uD83C\uDDE7");
     static final String BASE_URL = System.getenv("base_url");
+    static final String PB_URL = System.getenv("p24_url");
+    static final String PB_URL_CURR_ADD = System.getenv("p24_curr");
+    static final String MONO_URL = System.getenv("mono_url");
+    static final String MONO_URL_CURR_ADD = System.getenv("mono_curr");
 
     public void onUpdateReceived(Update update) {
         List<Handler> handlers = defineHandler(update);
@@ -53,9 +57,12 @@ public class MainHandler extends TelegramLongPollingBot {
                 handlers.add(new SetupLangHandler());
             } else if (message.getReplyToMessage() != null) {
                 Message replyMessage = message.getReplyToMessage();
-                if (replyMessage.getFrom().getBot() && this.getBotUsername().equalsIgnoreCase(replyMessage.getFrom().getUserName()) //моё сообщение
-                        && Misc.isThisFieldWithoutLang("FeedbackText", replyMessage.getText())) {
-                    handlers.add(new FeedBackSendHandler());
+                if (replyMessage.getFrom().getBot() && this.getBotUsername().equalsIgnoreCase(replyMessage.getFrom().getUserName())) { //моё сообщение
+                    if (Misc.isThisFieldWithoutLang("FeedbackText", replyMessage.getText())) {
+                        handlers.add(new FeedBackSendHandler());
+                    } else {
+                        handlers.add(new ErrorTextHandler());//не понимаю от кого и что за сообщение
+                    }
                 } else {
                     handlers.add(new ErrorTextHandler());//не понимаю от кого и что за сообщение
                 }

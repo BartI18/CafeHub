@@ -27,10 +27,12 @@ public class OthersMenuHandler implements Handler {
         keyboardMarkup.setSelective(true);
 
         KeyboardRow menuRow = new KeyboardRow();
-        menuRow.add("ABC");
-        menuRow.add("ABC2");
+        KeyboardRow menuRow1 = new KeyboardRow();
+        menuRow.add(Texts.getText(new KeyForText("CurrencyP24", lang)));
+        menuRow.add(Texts.getText(new KeyForText("CurrencyMono", lang)));
+        menuRow1.add(Texts.getText(new KeyForText("AtmP24", lang)));
 
-        keyboardMarkup.setKeyboard(Arrays.asList(menuRow));
+        keyboardMarkup.setKeyboard(Arrays.asList(menuRow, menuRow1));
         sendMessage.setReplyMarkup(keyboardMarkup);
         sendMessage.setText(Texts.getText(new KeyForText("OthersUserText", lang)));
         bot.execute(sendMessage);
