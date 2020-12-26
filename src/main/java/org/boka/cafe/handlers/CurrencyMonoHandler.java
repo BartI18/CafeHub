@@ -71,8 +71,8 @@ public class CurrencyMonoHandler implements Handler {
             if(!currJson.has("rateBuy") || !currJson.has("rateSell")) {
                 return currency;
             }
-            NameCurrency fromCurr = Misc.getCurrencyByCode(currJson.getString("currencyCodeA"));
-            NameCurrency toCurr = Misc.getCurrencyByCode(currJson.getString("currencyCodeB"));
+            NameCurrency fromCurr = Misc.getCurrencyByCode(String.valueOf(currJson.getInt("currencyCodeA")));
+            NameCurrency toCurr = Misc.getCurrencyByCode(String.valueOf(currJson.getInt("currencyCodeB")));
 
             currency.setFromCurr(fromCurr);
             currency.setToCurr(toCurr);
