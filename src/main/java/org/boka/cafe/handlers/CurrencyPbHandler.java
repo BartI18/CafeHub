@@ -1,5 +1,6 @@
 package org.boka.cafe.handlers;
 
+import org.boka.cafe.Misc.Cache;
 import org.boka.cafe.Misc.Misc;
 import org.boka.cafe.Texts;
 import org.boka.cafe.pojo.*;
@@ -24,9 +25,16 @@ public class CurrencyPbHandler implements Handler {
     @Override
     public void onUpdateReceived(Update update, TelegramLongPollingBot bot) throws TelegramApiException {
         Message message = update.getMessage();
+        List<Currency> currencies;
 
-        JSONArray response = sendRequest();
-        List<Currency> currencies = parseJson(response);
+        Cache.Entry entryCurr = Handler.getCache().getEntry("CurrencyP24");
+        if (entryCurr == null) {//в кеше ничего нет
+            JSONArray response = sendRequest();
+            currencies = parseJson(response);
+            Handler.getCache().insertInCache("CurrencyP24", currencies, 0, 1200_000);
+        } else {
+            currencies = entryCurr.getListObjects();
+        }
 
         if (!currencies.isEmpty()) {
             sendMessage(message, bot, currencies);

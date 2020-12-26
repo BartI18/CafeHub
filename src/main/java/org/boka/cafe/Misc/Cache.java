@@ -38,14 +38,14 @@ public class Cache {
         });
     }
 
-    public boolean insertInCache(Coordinates coordinates, List<Cafe> cafeList, int radius, long timeLife) {
-        Entry entry = new Entry(cafeList, radius, timeLife);
+    public boolean insertInCache(Object key, List data, int radius, long timeLife) {
+        Entry entry = new Entry(data, radius, timeLife);
         System.out.println("new Obj");
-        return OBJECTS_MAPS.put(coordinates, entry) != null;
+        return OBJECTS_MAPS.put(key, entry) != null;
     }
 
-    public Entry getEntry(Coordinates coordinates) {
-        return null;
+    public Entry getEntry(Object key) {
+        return OBJECTS_MAPS.get(key);
     }
 
     public List<Cafe> getSimilarListCafe(Coordinates coordinates, int raduis) {
@@ -56,7 +56,7 @@ public class Cache {
         if (!entryList.isEmpty()) { // ищу по указанному радиусу
             Optional<Map.Entry<Object, Entry>> example = entryList.stream().filter(entry -> entry.getValue().radius == raduis).findFirst();
             if (example.isPresent()) {
-                return example.get().getValue().getListCafe();
+                return example.get().getValue().getListObjects();
             }
         }
         return null;
@@ -76,14 +76,14 @@ public class Cache {
         private long timeCreate;
         private long timeLife;
 
-        public Entry(List listCafe, int radius, long timeLife) {
-            this.listObjects = listCafe;
+        public Entry(List listObjects, int radius, long timeLife) {
+            this.listObjects = listObjects;
             this.radius = radius;
             this.timeLife = timeLife;
             this.timeCreate = System.currentTimeMillis();
         }
 
-        public List getListCafe() {
+        public List getListObjects() {
             return listObjects;
         }
 

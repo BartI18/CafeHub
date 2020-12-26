@@ -4,6 +4,7 @@ import org.boka.cafe.Texts;
 import org.boka.cafe.handlers.*;
 import org.boka.cafe.pojo.Coordinates;
 import org.boka.cafe.pojo.KeyForText;
+import org.boka.cafe.pojo.NameCurrency;
 import org.boka.cafe.pojo.User;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -37,8 +38,8 @@ public class Misc {
         MAP_HANDLERS_BY_TEXT_WITHOUT_LANG.put("Feedback", Arrays.asList(FeedBackHandler.class));
         MAP_HANDLERS_BY_TEXT_WITHOUT_LANG.put("YourSettings", Arrays.asList(YourSettingsHandler.class, ShowMenuHandler.class));
         MAP_HANDLERS_BY_TEXT_WITHOUT_LANG.put("Others", Arrays.asList(OthersMenuHandler.class));
-        MAP_HANDLERS_BY_TEXT_WITHOUT_LANG.put("CurrencyP24", Arrays.asList(CurrencyPbHandler.class));
-        MAP_HANDLERS_BY_TEXT_WITHOUT_LANG.put("CurrencyMono", Arrays.asList(CurrencyMonoHandler.class));
+        MAP_HANDLERS_BY_TEXT_WITHOUT_LANG.put("CurrencyP24", Arrays.asList(CurrencyPbHandler.class, ShowMenuHandler.class));
+        MAP_HANDLERS_BY_TEXT_WITHOUT_LANG.put("CurrencyMono", Arrays.asList(CurrencyMonoHandler.class, ShowMenuHandler.class));
     }
 
     public static String defineLanguage(Integer userId, String language) {
@@ -119,6 +120,16 @@ public class Misc {
 
     public static HashMap<Integer, Integer> getRadiusByUser() {
         return RADIUS_BY_USER;
+    }
+
+    public static NameCurrency getCurrencyByCode(String code) {
+        List<NameCurrency> currencies = Arrays.asList(NameCurrency.values());
+        for (NameCurrency nameCurrency : currencies) {
+            if (nameCurrency.getCode().equalsIgnoreCase(code)) {
+                return nameCurrency;
+            }
+        }
+        return null;
     }
 
     public enum LANGUAGES {
