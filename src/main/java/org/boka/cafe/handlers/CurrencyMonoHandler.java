@@ -76,8 +76,8 @@ public class CurrencyMonoHandler implements Handler {
 
             currency.setFromCurr(fromCurr);
             currency.setToCurr(toCurr);
-            currency.setBuy(String.valueOf(currJson.getInt("rateBuy")));
-            currency.setSale(String.valueOf(currJson.getInt("rateSell")));
+            currency.setBuy(String.valueOf(currJson.getDouble("rateBuy")));
+            currency.setSale(String.valueOf(currJson.getDouble("rateSell")));
         } catch (Exception ex) {
             System.out.println(String.format("Err JSON: %s", currJson));
         }
