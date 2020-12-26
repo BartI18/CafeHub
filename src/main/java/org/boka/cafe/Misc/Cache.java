@@ -2,7 +2,6 @@ package org.boka.cafe.Misc;
 
 import org.boka.cafe.pojo.Cafe;
 import org.boka.cafe.pojo.Coordinates;
-import org.checkerframework.checker.nullness.Opt;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -14,20 +13,20 @@ import java.util.stream.Collectors;
 
 public class Cache {
 
-    private static final Map<Coordinates, Entry> CAFE_MAPS = new ConcurrentHashMap<>(128);
+    private static final Map<Object, Entry> OBJECTS_MAPS = new ConcurrentHashMap<>(128);
     private static Cache instance;
 
     private Cache() {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         executorService.submit(() -> {
             while (true) {
-                CAFE_MAPS.entrySet().forEach(coordinatesEntry -> {
-                    Entry entry = coordinatesEntry.getValue();
+                OBJECTS_MAPS.entrySet().forEach(innerEntry -> {
+                    Entry entry = innerEntry.getValue();
                     LocalDateTime lastTime = LocalDateTime.
                             ofInstant(Instant.ofEpochMilli(entry.getTimeCreate() + entry.getTimeLife()), TimeZone.getDefault().toZoneId());
                     if (LocalDateTime.now().isAfter(lastTime)) { //если дата уже прошла
-                        CAFE_MAPS.remove(coordinatesEntry.getKey());
-                        System.out.println(String.format("Удалил координаты: %s", coordinatesEntry.getKey()));
+                        OBJECTS_MAPS.remove(innerEntry.getKey());
+                        System.out.println(String.format("Удалил координаты: %s", innerEntry.getKey()));
                     }
                 });
                 try {
@@ -42,7 +41,7 @@ public class Cache {
     public boolean insertInCache(Coordinates coordinates, List<Cafe> cafeList, int radius, long timeLife) {
         Entry entry = new Entry(cafeList, radius, timeLife);
         System.out.println("new Obj");
-        return CAFE_MAPS.put(coordinates, entry) != null;
+        return OBJECTS_MAPS.put(coordinates, entry) != null;
     }
 
     public Entry getEntry(Coordinates coordinates) {
@@ -50,11 +49,12 @@ public class Cache {
     }
 
     public List<Cafe> getSimilarListCafe(Coordinates coordinates, int raduis) {
-        List<Map.Entry<Coordinates, Entry>> entryList = CAFE_MAPS.entrySet().stream()
-                .filter(coordinatesEntry -> Misc.isSimilarCoordinates(coordinates, coordinatesEntry.getKey()))
+        List<Map.Entry<Object, Entry>> entryList = OBJECTS_MAPS.entrySet().stream()
+                .filter(entry -> entry.getKey() instanceof Coordinates)
+                .filter(coordinatesEntry -> Misc.isSimilarCoordinates(coordinates, (Coordinates) coordinatesEntry.getKey()))
                 .collect(Collectors.toList());
         if (!entryList.isEmpty()) { // ищу по указанному радиусу
-            Optional<Map.Entry<Coordinates, Entry>> example = entryList.stream().filter(entry -> entry.getValue().radius == raduis).findFirst();
+            Optional<Map.Entry<Object, Entry>> example = entryList.stream().filter(entry -> entry.getValue().radius == raduis).findFirst();
             if (example.isPresent()) {
                 return example.get().getValue().getListCafe();
             }
@@ -71,24 +71,24 @@ public class Cache {
 
     public static class Entry {
 
-        private List<Cafe> listCafe;
+        private List listObjects;
         private int radius;
         private long timeCreate;
         private long timeLife;
 
-        public Entry(List<Cafe> listCafe, int radius, long timeLife) {
-            this.listCafe = listCafe;
+        public Entry(List listCafe, int radius, long timeLife) {
+            this.listObjects = listCafe;
             this.radius = radius;
             this.timeLife = timeLife;
             this.timeCreate = System.currentTimeMillis();
         }
 
-        public List<Cafe> getListCafe() {
-            return listCafe;
+        public List getListCafe() {
+            return listObjects;
         }
 
-        protected void setListCafe(List<Cafe> listCafe) {
-            this.listCafe = listCafe;
+        protected void setListCafe(List listCafe) {
+            this.listObjects = listCafe;
         }
 
         public int getRadius() {
@@ -122,18 +122,18 @@ public class Cache {
             Entry entry = (Entry) o;
             return timeCreate == entry.timeCreate &&
                     timeLife == entry.timeLife &&
-                    Objects.equals(listCafe, entry.listCafe);
+                    Objects.equals(listObjects, entry.listObjects);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(listCafe, timeCreate, timeLife);
+            return Objects.hash(listObjects, timeCreate, timeLife);
         }
 
         @Override
         public String toString() {
             return "Entry{" +
-                    "listCafe=" + listCafe +
+                    "listCafe=" + listObjects +
                     ", timeCreate=" + timeCreate +
                     ", timeLife=" + timeLife +
                     '}';
