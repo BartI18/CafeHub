@@ -56,12 +56,13 @@ public class CurrencyPbHandler implements Handler {
     }
 
     private Currency parseOneCurrJson(JSONObject currJson) {
-        Currency currency = null;
+        Currency currency = new Currency();
         try {
             NameCurrency fromCurr = NameCurrency.valueOf(currJson.getString("ccy"));
             NameCurrency toCurr = NameCurrency.valueOf(currJson.getString("base_ccy"));
 
-            currency = new Currency(fromCurr, toCurr);
+            currency.setFromCurr(fromCurr);
+            currency.setToCurr(toCurr);
             currency.setBuy(currJson.getString("buy"));
             currency.setSale(currJson.getString("sale"));
         } catch (Exception ex) {
