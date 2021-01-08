@@ -132,6 +132,10 @@ public class Misc {
         return null;
     }
 
+    public static String getValueFromEnv(String key) {
+        return System.getenv(key);
+    }
+
     public enum LANGUAGES {
         RU, EN, UA;
     }

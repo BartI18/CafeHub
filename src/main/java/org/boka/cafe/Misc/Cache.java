@@ -50,7 +50,7 @@ public class Cache {
 
     public List<Cafe> getSimilarListCafe(Coordinates coordinates, int raduis) {
         List<Map.Entry<Object, Entry>> entryList = OBJECTS_MAPS.entrySet().stream()
-                .filter(entry -> entry.getKey() instanceof Coordinates)
+                .filter(entry -> entry.getKey() instanceof Coordinates && !entry.getValue().listObjects.isEmpty() && entry.getValue().listObjects.get(0) instanceof Cafe)
                 .filter(coordinatesEntry -> Misc.isSimilarCoordinates(coordinates, (Coordinates) coordinatesEntry.getKey()))
                 .collect(Collectors.toList());
         if (!entryList.isEmpty()) { // ищу по указанному радиусу

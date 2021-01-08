@@ -5,11 +5,11 @@ import org.boka.cafe.pojo.User;
 import org.boka.cafe.pojo.UserSettings;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
-import javax.sql.DataSource;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
@@ -18,15 +18,8 @@ import java.util.concurrent.Executors;
 
 public class DatabaseManipulation {
 
-    private static String url = System.getenv("db_url");
-
-    public static void registerPostgresDriver() {
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Driver has not register!");
-        }
-    }
+    private static ApplicationContext mainContext = new ClassPathXmlApplicationContext("/spring_context.xml");
+    private static JdbcTemplate template = (JdbcTemplate) mainContext.getBean("jdbcTemplate");
 
     public static void schedulerResetAmount() {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -35,13 +28,7 @@ public class DatabaseManipulation {
         });
     }
 
-    public static JdbcTemplate getJDBCConnection() {
-        DataSource ds = new DriverManagerDataSource(url);
-        return new JdbcTemplate(ds);
-    }
-
     public static JSONObject getTextFromDB() {
-        JdbcTemplate template = getJDBCConnection();
         JSONObject textsConcat = template.query("SELECT name_field, lang, text_value FROM public.handbook", resultSet -> {
             JSONObject texts = new JSONObject();
             int i = 0;
@@ -59,7 +46,6 @@ public class DatabaseManipulation {
     }
 
     public static void addNewClient(User user) {
-        JdbcTemplate template = getJDBCConnection();
         String sql = "INSERT INTO PUBLIC.users (id, count_send, name_user, number_phone, radius, prefer_lang) values (?, ?, ?, ?, ?, ?)";
         try {
             template.update(sql, user.getId(), user.getCountSend(), user.getName(), user.getPhone(), user.getRadius(), user.getLang());
@@ -69,13 +55,11 @@ public class DatabaseManipulation {
     }
 
     public static int resetAmountRequest() {
-        JdbcTemplate template = getJDBCConnection();
         String sql = "UPDATE PUBLIC.users SET count_send = 3";
         return template.update(sql);
     }
 
     public static synchronized boolean hasSendRequest(int id) {
-        JdbcTemplate template = getJDBCConnection();
         String sql = String.format("SELECT count_send FROM public.users where id =%d", id);
         Integer count = template.queryForObject(sql, Integer.TYPE);
         boolean hasAttempts = count > 0;
@@ -87,7 +71,6 @@ public class DatabaseManipulation {
 
     public static void fillCacheLangAndDistance() {
         HashMap<Integer, String> map = Misc.getPreferLangByUser();
-        JdbcTemplate template = getJDBCConnection();
         String sql = "SELECT id, prefer_lang FROM public.users WHERE prefer_lang IS NOT NULL";
         template.query(sql, (resultSet, i) -> map.put(resultSet.getInt(1), resultSet.getString(2)));
 
@@ -97,7 +80,6 @@ public class DatabaseManipulation {
     }
 
     public static void updateLang(User user) {
-        JdbcTemplate template = getJDBCConnection();
         String sql = "UPDATE PUBLIC.users SET prefer_lang = ? WHERE id = ?";
         try {
             template.update(sql, user.getLang(), user.getId());
@@ -107,7 +89,6 @@ public class DatabaseManipulation {
     }
 
     public static void updateRadius(User user) {
-        JdbcTemplate template = getJDBCConnection();
         String sql = "UPDATE PUBLIC.users SET radius = ? WHERE id = ?";
         try {
             template.update(sql, user.getRadius(), user.getId());
@@ -117,7 +98,6 @@ public class DatabaseManipulation {
     }
 
     public static UserSettings getUserSettingById(int id) {
-        JdbcTemplate template = getJDBCConnection();
         String sql = "SELECT id, count_send, name_user, radius, prefer_lang FROM public.users where id = ?";
         try {
             return template.query(sql, new Integer[]{id}, resultSet -> {

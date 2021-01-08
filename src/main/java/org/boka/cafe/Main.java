@@ -11,9 +11,6 @@ public class Main {
     public static void main(String[] args) {
         ApiContextInitializer.init();
 
-        //загружнаю драйвер
-        DatabaseManipulation.registerPostgresDriver();
-
         //Загружаю текста
         JSONObject textsJson = DatabaseManipulation.getTextFromDB();
         Texts.registerTexts(textsJson);

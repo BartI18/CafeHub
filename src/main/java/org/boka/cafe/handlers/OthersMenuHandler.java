@@ -30,7 +30,8 @@ public class OthersMenuHandler implements Handler {
         KeyboardRow menuRow1 = new KeyboardRow();
         menuRow.add(Texts.getText(new KeyForText("CurrencyP24", lang)));
         menuRow.add(Texts.getText(new KeyForText("CurrencyMono", lang)));
-        menuRow1.add(Texts.getText(new KeyForText("AtmP24", lang)));
+        menuRow.add(Texts.getText(new KeyForText("AtmP24", lang)));
+        menuRow1.add(Texts.getText(new KeyForText("BackButton", lang)));
 
         keyboardMarkup.setKeyboard(Arrays.asList(menuRow, menuRow1));
         sendMessage.setReplyMarkup(keyboardMarkup);
