@@ -1,5 +1,6 @@
 package org.boka.cafe.handlers;
 
+import com.mchange.v2.log.*;
 import org.boka.cafe.Misc.Misc;
 import org.boka.cafe.db.DatabaseManipulation;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -12,6 +13,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MainHandler extends TelegramLongPollingBot {
+
+    private static final MLogger LOGGER = MLog.getLogger(DatabaseManipulation.class);
 
     private static final List<String> LIST_DISTANCE = Arrays.asList("250 Ⓜ", "500 Ⓜ", "1000 Ⓜ", "1500 Ⓜ");
     private static final List<String> LIST_LANG = Arrays.asList("Українська \uD83C\uDDFA\uD83C\uDDE6", "Русский \uD83C\uDDF7\uD83C\uDDFA", "English \uD83C\uDDEC\uD83C\uDDE7");
@@ -28,7 +31,7 @@ public class MainHandler extends TelegramLongPollingBot {
                 try {
                     h.onUpdateReceived(update, this);
                 } catch (TelegramApiException e) {
-                    System.out.println(e.getMessage());
+                    LOGGER.log(MLevel.WARNING, "Catch exception", e.getMessage());
                 }
             }
         }

@@ -1,5 +1,6 @@
 package org.boka.cafe.db;
 
+import com.mchange.v2.log.*;
 import org.boka.cafe.Misc.Misc;
 import org.boka.cafe.pojo.User;
 import org.boka.cafe.pojo.UserSettings;
@@ -7,7 +8,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.time.LocalDateTime;
@@ -19,6 +19,7 @@ import java.util.concurrent.Executors;
 public class DatabaseManipulation {
 
     private static ApplicationContext mainContext = new ClassPathXmlApplicationContext("/spring_context.xml");
+    private static MLogger logger = MLog.getLogger(DatabaseManipulation.class);
     private static JdbcTemplate template = (JdbcTemplate) mainContext.getBean("jdbcTemplate");
 
     public static void schedulerResetAmount() {
@@ -49,8 +50,8 @@ public class DatabaseManipulation {
         String sql = "INSERT INTO PUBLIC.users (id, count_send, name_user, number_phone, radius, prefer_lang) values (?, ?, ?, ?, ?, ?)";
         try {
             template.update(sql, user.getId(), user.getCountSend(), user.getName(), user.getPhone(), user.getRadius(), user.getLang());
-        } catch (DuplicateKeyException ex) {
-            System.out.println(String.format("Duplicate while add client: %d\tMessage: %s", user.getId(), ex.getCause().getMessage()));
+        } catch (RuntimeException ex) {
+            logger.log(MLevel.WARNING, String.format("Duplicate while add client: %d", user.getId()), ex);
         }
     }
 
@@ -84,7 +85,7 @@ public class DatabaseManipulation {
         try {
             template.update(sql, user.getLang(), user.getId());
         } catch (RuntimeException ex) {
-            System.out.println(String.format("Exception while update lang client: %d\tMessage: %s", user.getId(), ex.getCause().getMessage()));
+            logger.log(MLevel.WARNING, String.format("Exception while update lang client: %d", user.getId()), ex);
         }
     }
 
@@ -93,7 +94,7 @@ public class DatabaseManipulation {
         try {
             template.update(sql, user.getRadius(), user.getId());
         } catch (RuntimeException ex) {
-            System.out.println(String.format("Exception while update radius client: %d\tMessage: %s", user.getId(), ex.getCause().getMessage()));
+            logger.log(MLevel.WARNING, String.format("Exception while update radius client: %d", user.getId()), ex);
         }
     }
 
@@ -112,7 +113,7 @@ public class DatabaseManipulation {
                 return us;
             });
         } catch (RuntimeException ex) {
-            System.out.println(String.format("Exception while get settings client: %d\tMessage: %s", id, ex.getCause().getMessage()));
+            logger.log(MLevel.WARNING, String.format("Exception while get settings client: %d", id), ex);
         }
         return new UserSettings();
     }
