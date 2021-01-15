@@ -16,15 +16,19 @@
         <property name="initialPoolSize" value="5"/>
     </bean>
 
-    <bean id="cachingConnectionFactory" class="org.springframework.amqp.rabbit.connection.CachingConnectionFactory">
+    <bean id="uri" class="java.net.URI" factory-method="create">
         <constructor-arg index="0" value="#{misc.getValueFromEnv('CLOUDAMQP_URL')}"/>
+    </bean>
+
+    <bean id="cachingConnectionFactory" class="org.springframework.amqp.rabbit.connection.CachingConnectionFactory">
+        <constructor-arg index="0" ref="uri"/>
     </bean>
 
     <bean id="rabbitAdmin" class="org.springframework.amqp.rabbit.core.RabbitAdmin">
         <constructor-arg index="0" ref="cachingConnectionFactory"/>
     </bean>
 
-
     <bean id="misc" class="org.boka.cafe.Misc.Misc"/>
+
 
 </beans>
