@@ -1,6 +1,7 @@
 package org.boka.cafe.handlers;
 
 import org.boka.cafe.Misc.Misc;
+import org.boka.cafe.Misc.UtilClassRabbitMQ;
 import org.boka.cafe.Texts;
 import org.boka.cafe.pojo.KeyForText;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -26,6 +27,9 @@ public class FeedBackSendHandler implements Handler {
         String lang = Misc.defineLanguage(message.getFrom().getId(), message.getFrom().getLanguageCode());
         sendMessage.setText(Texts.getText(new KeyForText("FeedbackThank", lang)));
         bot.execute(sendMessage);
+
+        String feedBack = String.format("Сообщение от: %s <pre>\n</pre>Текст: %s", getUserName(message.getChat()), message.getText());
+        new UtilClassRabbitMQ().sendMessageToRabbit("amq.direct", "CAFE.INFO.FEEDBACK", feedBack);
     }
 
     private String getUserName(Chat chat) {

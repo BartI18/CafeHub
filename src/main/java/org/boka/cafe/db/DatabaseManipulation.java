@@ -18,9 +18,8 @@ import java.util.concurrent.Executors;
 
 public class DatabaseManipulation {
 
-    private static ApplicationContext mainContext = new ClassPathXmlApplicationContext("/spring_context.xml");
     private static MLogger logger = MLog.getLogger(DatabaseManipulation.class);
-    private static JdbcTemplate template = (JdbcTemplate) mainContext.getBean("jdbcTemplate");
+    private static JdbcTemplate template = Misc.getApplicationContext().getBean(JdbcTemplate.class);
 
     public static void schedulerResetAmount() {
         ExecutorService executorService = Executors.newSingleThreadExecutor();

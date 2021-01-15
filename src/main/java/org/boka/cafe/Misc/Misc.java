@@ -6,6 +6,8 @@ import org.boka.cafe.pojo.Coordinates;
 import org.boka.cafe.pojo.KeyForText;
 import org.boka.cafe.pojo.NameCurrency;
 import org.boka.cafe.pojo.User;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
@@ -17,6 +19,8 @@ import java.util.List;
 import java.util.TimeZone;
 
 public class Misc {
+
+    private static ApplicationContext mainContext = new ClassPathXmlApplicationContext("/spring_context.xml");
 
     private static final List<String> LANGUAGES_LIST = Arrays.asList(LANGUAGES.UA.name(), LANGUAGES.RU.name(), LANGUAGES.EN.name());
 
@@ -130,6 +134,10 @@ public class Misc {
             }
         }
         return null;
+    }
+
+    public static ApplicationContext getApplicationContext() {
+        return mainContext;
     }
 
     public static String getValueFromEnv(String key) {
